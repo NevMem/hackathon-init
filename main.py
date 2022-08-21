@@ -19,7 +19,7 @@ def main():
     base_template = TemplateLoader.load('templates/base')
     print(base_template)
 
-    base_template.run(args.out_dir, config=config, gradle_modules=['some'])
+    base_template.run(args.out_dir, config=config)
 
 
 if __name__ == '__main__':
