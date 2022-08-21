@@ -1,14 +1,16 @@
-[
-    {
-       "file": "settings.gradle.jinja",
-       "path": "/" 
-    },
-    {
-        "file": "gradle.properties.jinja",
-        "path": "/"
-    },
-    {
-        "file": "build.gradle.jinja",
-        "path": "/"
-    }
-]
+{
+    "files": [
+        {
+            "file": "settings.gradle.kts.jinja",
+            "path": "./"
+        },
+        {
+            "file": "gradle.properties.jinja",
+            "path": "./"
+        },
+        {
+            "file": "build.gradle.jinja",
+            "path": "./"
+        }
+    ]
+}
