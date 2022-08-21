@@ -1,0 +1,14 @@
+[
+    {
+       "file": "settings.gradle.jinja",
+       "path": "/" 
+    },
+    {
+        "file": "gradle.properties.jinja",
+        "path": "/"
+    },
+    {
+        "file": "build.gradle.jinja",
+        "path": "/"
+    }
+]

@@ -1,0 +1,15 @@
+pluginManagement {
+    val kspVersion: String by settings
+    val kotlinVersion: String by settings
+    plugins {
+        id("com.google.devtools.ksp") version kspVersion
+        id("org.jetbrains.kotlin.jvm") version kotlinVersion
+    }
+    repositories {
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = "{{project_name}}"
+
+{% for module in gradle_modules %}'include({{module}})'{{ "\n" if not loop.last else "" }}{% endfor %}

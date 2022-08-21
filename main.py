@@ -1,5 +1,7 @@
 import argparse
 
+from config.config_file import ConfigFileParser
+
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -9,7 +11,9 @@ def parse_args():
 
 
 def main():
-    print(parse_args())
+    args = parse_args()
+    config = ConfigFileParser.parse(args.config_file)
+    print(config)
 
 
 if __name__ == '__main__':
