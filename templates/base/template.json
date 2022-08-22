@@ -1,4 +1,5 @@
 {
+    "name": "Base template",
     "files": [
         {
             "file": "settings.gradle.kts.jinja",
@@ -11,6 +12,14 @@
         {
             "file": "build.gradle.jinja",
             "path": "./"
+        },
+        {
+            "file": "gradle/wrapper/gradle-wrapper.jar",
+            "path": "gradle/wrapper/"
+        },
+        {
+            "file": "gradle/wrapper/gradle-wrapper.properties",
+            "path": "gradle/wrapper/"
         }
     ]
 }
