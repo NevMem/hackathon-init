@@ -12,4 +12,4 @@ pluginManagement {
 
 rootProject.name = "{{config.project_name}}"
 
-{% for module in gradle_modules %}include({{module}}){{ "\n" if not loop.last else "" }}{% endfor %}
+{% for module in gradle_modules %}include("{{module}}"){{ "\n" if not loop.last else "" }}{% endfor %}

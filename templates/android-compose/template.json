@@ -1,0 +1,9 @@
+{
+    "id": "android-compose",
+    "marker": "android-compose",
+    "depends_on": ["base"],
+    "defines": {
+        "gradle_modules": [":android:app"]
+    },
+    "files": []
+}

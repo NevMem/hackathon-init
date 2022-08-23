@@ -71,6 +71,54 @@ class Pipeline:
 
         selected_templates = get_selected_templates(templates=self.templates, markers=markers)
 
+        global_defines = self._create_global_defines(selected_templates)
+
+        execution_order = self._create_execution_order(selected_templates)
+        cprint(f"Calculated templates execution order: {', '.join(map(lambda x: x.template_id, execution_order))}", on_color='on_green')
+        
+        for template in execution_order:
+            template.run(self.args.out_dir, config=self.config, **global_defines)
+
+    @staticmethod
+    def _create_execution_order(templates: List[Template]) -> List[Template]:
+        ordered_template_ids = set()
+        ordered_templates: List[Template] = []
+
+        while True:
+            added = False
+            for template in templates:
+                if template.template_id in ordered_template_ids:
+                    continue
+                all_deps_added = True
+                for depends in template.depends_on:
+                    if depends not in ordered_template_ids:
+                        all_deps_added = False
+                if all_deps_added:
+                    added = True
+                    ordered_template_ids.add(template.template_id)
+                    ordered_templates.append(template)
+            if not added:
+                cprint(f"Check your templates dependencies graph, maybe there are some cycles", on_color='on_red')
+                sys.exit(1)
+            if len(ordered_template_ids) == len(templates):
+                break
+
+        return ordered_templates
+
+    @staticmethod
+    def _create_global_defines(templates: List[Template]) -> Dict:
+        defines = dict()
+        for template in templates:
+            for key in template.defines:
+                if type(template.defines[key]) == list:
+                    if key not in defines:
+                        defines[key] = []
+                    for value in template.defines[key]:
+                        defines[key].append(value)
+                else:
+                    defines[key] = template.defines[key]
+        return defines
+
 
 def main():
     args = parse_args()

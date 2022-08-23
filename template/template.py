@@ -1,5 +1,5 @@
 from config.config_file import ConfigFile
-from typing import List
+from typing import List, Dict
 import jinja2
 import json
 import os
@@ -48,14 +48,16 @@ class TemplateFile:
 class Template:
     files: List[TemplateFile]
     depends_on: List[str]
+    defines: Dict[str, str]
     template_id: str
     marker: str
 
-    def __init__(self, template_id: str, marker: str, files: List[TemplateFile], depends_on: List[str]):
+    def __init__(self, template_id: str, marker: str, files: List[TemplateFile], depends_on: List[str], defines: Dict[str, str]):
         self.template_id = template_id
         self.files = files
         self.marker = marker
         self.depends_on = depends_on
+        self.defines = defines
 
     def run(self, out_dir: str, *args, **kwargs):
         cprint(f"Running template: {self.template_id.upper()}", on_color='on_green')
@@ -77,11 +79,16 @@ class TemplateLoader:
             for file in data['files']:
                 files.append(TemplateFile(filename=os.path.join(dirname, file['file']), path=file['path']))
 
+            defines = dict()
+            if 'defines' in data:
+                defines = data['defines']
+
             return Template(
                 template_id=data['id'],
                 marker=data['marker'],
                 files=files,
                 depends_on=data['depends_on'],
+                defines=defines,
             )
 
 

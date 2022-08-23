@@ -2,9 +2,6 @@
     "id": "base",
     "marker": "base",
     "depends_on": [],
-    "defines": {
-        "gradle_modules": ["kek"]
-    },
     "files": [
         {
             "file": "settings.gradle.kts.jinja",
