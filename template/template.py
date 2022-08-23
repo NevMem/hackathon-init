@@ -47,14 +47,18 @@ class TemplateFile:
 
 class Template:
     files: List[TemplateFile]
-    name: str
+    depends_on: List[str]
+    template_id: str
+    marker: str
 
-    def __init__(self, name: str, files: List[TemplateFile]):
-        self.name = name
+    def __init__(self, template_id: str, marker: str, files: List[TemplateFile], depends_on: List[str]):
+        self.template_id = template_id
         self.files = files
+        self.marker = marker
+        self.depends_on = depends_on
 
     def run(self, out_dir: str, *args, **kwargs):
-        cprint(f"Running template: {self.name.upper()}", on_color='on_green')
+        cprint(f"Running template: {self.template_id.upper()}", on_color='on_green')
         for file in self.files:
             file.run(out_dir, *args, **kwargs)
 
@@ -73,4 +77,19 @@ class TemplateLoader:
             for file in data['files']:
                 files.append(TemplateFile(filename=os.path.join(dirname, file['file']), path=file['path']))
 
-            return Template(name=data['name'], files=files)
+            return Template(
+                template_id=data['id'],
+                marker=data['marker'],
+                files=files,
+                depends_on=data['depends_on'],
+            )
+
+
+    @staticmethod
+    def load_all_from_dir(dirname: str) -> List[Template]:
+        result = []
+        for entity in os.listdir(dirname):
+            joined = os.path.join(dirname, entity)
+            if os.path.isdir(joined) and os.path.exists(os.path.join(joined, 'template.json')):
+                result.append(TemplateLoader.load(joined))
+        return result

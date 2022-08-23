@@ -1,5 +1,5 @@
 import yaml
-from typing import Optional
+from typing import Optional, List
 from enum import Enum
 
 class AndroidUIType(Enum):
@@ -35,6 +35,16 @@ class ConfigFile:
 
     def __repr__(self):
         return str(self.__dict__)
+
+    def get_markers(self) -> List[str]:
+        markers = []
+        markers.append('base')
+        if self.android is not None:
+            if self.android.ui_type == AndroidUIType.COMPOSE:
+                markers.append('android-compose')
+            else:
+                markers.append('android-declarative')
+        return markers
 
 
 class ConfigFileParser:

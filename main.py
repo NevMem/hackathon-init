@@ -1,7 +1,10 @@
 import argparse
+import sys
+from typing import List, Dict
+from termcolor import cprint
 
-from config.config_file import ConfigFileParser
-from template.template import TemplateLoader
+from config.config_file import ConfigFile, ConfigFileParser
+from template.template import Template, TemplateLoader
 
 
 def parse_args():
@@ -11,15 +14,82 @@ def parse_args():
     return parser.parse_args()
 
 
+def template_with_id(templates: List[Template], template_id: str) -> Template:
+    for template in templates:
+        if template.template_id == template_id:
+            return template
+    cprint(f"Cannot find template with id: {template_id}", on_color='on_red')
+    sys.exit(1)
+
+
+def get_selected_templates(templates: List[Template], markers: List[str]) -> List[Template]:
+    selected: List[Template] = []
+    selected_ids = set()
+    for template in templates:
+        if template.marker in markers:
+            selected.append(template)
+            selected_ids.add(template.template_id)
+    
+
+    while True:
+        added = False
+        for template in selected:
+            for depends in template.depends_on:
+                if depends not in selected_ids:
+                    new_template = template_with_id(templates=templates, template_id=depends)
+                    selected_ids.add(depends)
+                    selected.append(new_template)
+                    added = True
+        if not added:
+            break
+
+    for marker in markers:
+        found = False
+        for template in selected:
+            if template.marker == marker:
+                found = True
+        if not found:
+            cprint(f"Template with marker {marker} do not exists", on_color='on_red')
+            sys.exit(1)
+
+    return selected
+
+
+class Pipeline:
+    confif: ConfigFile
+    templates: List[Template]
+    args: Dict[str, str]
+    def __init__(self, args: Dict[str, str], config: ConfigFile, templates: List[Template]):
+        self.args = args
+        self.config = config
+        self.templates = templates
+
+    def run(self):
+        cprint(f"Loading markers from config file", on_color='on_cyan')
+        markers = self.config.get_markers()
+        cprint(f"Markers are: {', '.join(markers)}", on_color='on_green')
+
+        selected_templates = get_selected_templates(templates=self.templates, markers=markers)
+
+
 def main():
     args = parse_args()
     config = ConfigFileParser.parse(args.config_file)
-    print(config)
 
-    base_template = TemplateLoader.load('templates/base')
-    print(base_template)
+    # base_template.run(args.out_dir, config=config)
 
-    base_template.run(args.out_dir, config=config)
+    templates = TemplateLoader.load_all_from_dir('templates')
+
+    for template in templates:
+        cprint(f"Loaded template: {template.template_id}", on_color='on_green')
+
+    pipeline = Pipeline(
+        args=args,
+        config=config,
+        templates=templates,
+    )
+
+    pipeline.run()
 
 
 if __name__ == '__main__':
