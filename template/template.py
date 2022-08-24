@@ -16,6 +16,7 @@ class TemplateFile:
 
     def run(self, out_dir: str, *args, **kwargs):
         out_path = os.path.join(out_dir, self._get_output_path())
+        out_path = jinja2.Template(out_path).render(*args, **kwargs)
         self._ensure_dirs_exists(out_path)
         if self._should_use_jinja():
             with open(self.filename, 'r') as inp:

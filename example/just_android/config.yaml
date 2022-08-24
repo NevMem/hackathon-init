@@ -1,4 +1,5 @@
 project_name: "Some hackacthon"
 base_package_name: "com.nevmem.somehackathon"
 android:
+  app_name: Some hackathon app
   ui: compose

@@ -9,12 +9,14 @@ class AndroidUIType(Enum):
 
 class AndroidConfig:
     ui_type: AndroidUIType
+    app_name: str
 
     def __init__(self, obj):
         self.ui_type = AndroidUIType.DEFAULT
         if 'ui' in obj:
             if obj['ui'] == 'compose':
                 self.ui_type = AndroidUIType.COMPOSE
+        self.app_name = obj['app_name']
 
     def __repr__(self):
         return str(self.__dict__)
@@ -45,6 +47,9 @@ class ConfigFile:
             else:
                 markers.append('android-declarative')
         return markers
+
+    def get_base_package_path(self) -> str:
+        return self.base_package_name.replace('.', '/')
 
 
 class ConfigFileParser:

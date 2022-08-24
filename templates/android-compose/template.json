@@ -5,5 +5,44 @@
     "defines": {
         "gradle_modules": [":android:app"]
     },
-    "files": []
+    "tests": [
+        {
+            "type": "gradle",
+            "command": ":android:app:buildDebug"
+        }
+    ],
+    "files": [
+        {
+            "file": "app/build.gradle.jinja",
+            "path": "./android/app/"
+        },
+        {
+            "file": "app/proguard-rules.pro",
+            "path": "./android/app/"
+        },
+        {
+            "file": "app/src/main/kotlin/base_package_name/CustomApplication.kt.jinja",
+            "path": "./android/app/src/main/kotlin/{{config.get_base_package_path()}}/"
+        },
+        {
+            "file": "app/src/main/kotlin/base_package_name/MainActivity.kt.jinja",
+            "path": "./android/app/src/main/kotlin/{{config.get_base_package_path()}}/"
+        },
+        {
+            "file": "app/src/main/AndroidManifest.xml.jinja",
+            "path": "./android/app/src/main/"
+        },
+        {
+            "file": "app/src/main/res/values/strings.xml.jinja",
+            "path": "./android/app/src/main/res/values"
+        },
+        {
+            "file": "app/src/main/res/values/colors.xml",
+            "path": "./android/app/src/main/res/values"
+        },
+        {
+            "file": "app/src/main/res/values/styles.xml",
+            "path": "./android/app/src/main/res/values"
+        }
+    ]
 }

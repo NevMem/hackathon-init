@@ -1,0 +1,31 @@
+package {{config.base_package_name}}
+
+import android.app.Application
+import com.nevmem.survey.di.createAppModule
+import com.nevmem.survey.di.createViewModelsModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+
+class CustomApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+
+        initMetrica()
+
+        startKoin {
+            androidContext(this@SurveyApplication)
+            modules(
+                createAppModule(this@SurveyApplication),
+                createViewModelsModule(),
+            )
+        }
+    }
+
+    private fun initMetrica() {
+        // val config = YandexMetricaConfig
+        //     .newConfigBuilder("// --- TODO --- //")
+        //     .build()
+        // YandexMetrica.activate(applicationContext, config)
+        // YandexMetrica.enableActivityAutoTracking(this)
+    }
+}
