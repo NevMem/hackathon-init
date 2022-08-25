@@ -61,6 +61,10 @@
         {
             "file": "app/src/main/kotlin/base_package_name/ui/splash/AppSplashScreenViewModel.kt.jinja",
             "path": "./android/app/src/main/kotlin/{{config.get_base_package_path()}}/ui/splash/"
+        },
+        {
+            "file": "app/src/main/kotlin/base_package_name/util/vm.kt.jinja",
+            "path": "./android/app/src/main/kotlin/{{config.get_base_package_path()}}/util/"
         }
     ]
 }
