@@ -48,9 +48,22 @@ class TemplateFile:
         return str(self.__dict__)
 
 
+class TemplateTestResult:
+    code: int
+    stdout: str
+    stderr: str
+    def __init__(self, code: int, stdout: str, stderr: str):
+        self.code = code
+        self.stdout = stdout
+        self.stderr = stderr
+
+    def is_failed(self):
+        return self.code != 0
+
+
 class TemplateTest(ABC):
     @abstractclassmethod
-    def run(self, out_dir: str):
+    def run(self, out_dir: str) -> TemplateTestResult:
         pass
 
 
@@ -61,12 +74,25 @@ class TemplateGradleTest(TemplateTest):
         self.command = command
         self.name = name
 
-    def run(self, out_dir: str):
-        cprint(f"Running test: {self.name}", color='green')
-        try:
-            sp.check_output(['/bin/bash', './gradlew', self.command], cwd=out_dir)
-        except sp.CalledProcessError as error:
-            print(error.returncode)
+    def run(self, out_dir: str) -> TemplateTestResult:
+        cprint(f"Test: {self.name}", color='green', end=' ', flush=True)
+        test_process = sp.Popen(
+            ['/bin/bash', './gradlew', self.command],
+            cwd=out_dir,
+            stdout=sp.PIPE,
+            stderr=sp.PIPE,
+        )
+        test_process.wait()
+        result = TemplateTestResult(
+            code=test_process.returncode,
+            stdout=test_process.stdout.read().decode(),
+            stderr=test_process.stderr.read().decode(),
+        )
+        if result.is_failed():
+            cprint(' FAILED ', on_color='on_red')
+            cprint(result.stderr, color='red')
+        else:
+            cprint(' OK ', on_color='on_green')
 
     def __repr__(self):
         return str(self.__dict__)

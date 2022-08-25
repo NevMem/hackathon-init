@@ -11,6 +11,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('config_file')
     parser.add_argument('out_dir')
+    parser.add_argument('--run-tests', action='store_true')
     return parser.parse_args()
 
 
@@ -79,8 +80,9 @@ class Pipeline:
         for template in execution_order:
             template.run(self.args.out_dir, config=self.config, **global_defines)
 
-        for template in execution_order:
-            template.run_tests(self.args.out_dir)
+        if self.args.run_tests:
+            for template in execution_order:
+                template.run_tests(self.args.out_dir)
 
     @staticmethod
     def _create_execution_order(templates: List[Template]) -> List[Template]:
