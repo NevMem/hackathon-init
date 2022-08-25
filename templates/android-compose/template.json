@@ -53,7 +53,6 @@
             "file": "app/src/main/kotlin/base_package_name/di/createViewModelsModule.kt.jinja",
             "path": "./android/app/src/main/kotlin/{{config.get_base_package_path()}}/di/"
         },
-
         {
             "file": "app/src/main/kotlin/base_package_name/ui/splash/AppSplashScreen.kt.jinja",
             "path": "./android/app/src/main/kotlin/{{config.get_base_package_path()}}/ui/splash/"
