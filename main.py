@@ -87,6 +87,7 @@ class Pipeline:
         ordered_template_ids = set()
         ordered_templates: List[Template] = []
 
+        # Sorry for this, but this is dummy topological sort (just believe me)
         while True:
             added = False
             for template in templates:
