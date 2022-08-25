@@ -1,5 +1,6 @@
-package com.nevmem.survey.ui.splash
+package {{config.base_package_name}}.ui.splash
 
+import {{config.base_package_name}}.R
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -9,16 +10,17 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import org.koin.androidx.compose.viewModel
 
 @Composable
-fun EthnoSplashScreen(navController: NavController) {
+fun AppSplashScreen(navController: NavController) {
 
-    val viewModel: EthnoSplashScreenViewModel by viewModel()
+    val viewModel: AppSplashScreenViewModel by viewModel()
 
     Text(
-        text = "Ethnosurvey",
+        text = stringResource(R.string.app_name),
         style = MaterialTheme.typography.h3,
         modifier = Modifier
             .fillMaxWidth()

@@ -1,13 +1,14 @@
 {
     "id": "android-compose",
     "marker": "android-compose",
-    "depends_on": ["base"],
+    "depends_on": ["base", "shared-versions"],
     "defines": {
         "gradle_modules": [":android:app"]
     },
     "tests": [
         {
             "type": "gradle",
+            "name": "build debug",
             "command": ":android:app:buildDebug"
         }
     ],
@@ -43,6 +44,23 @@
         {
             "file": "app/src/main/res/values/styles.xml",
             "path": "./android/app/src/main/res/values"
+        },
+        {
+            "file": "app/src/main/kotlin/base_package_name/di/appModule.kt.jinja",
+            "path": "./android/app/src/main/kotlin/{{config.get_base_package_path()}}/di/"
+        },
+        {
+            "file": "app/src/main/kotlin/base_package_name/di/createViewModelsModule.kt.jinja",
+            "path": "./android/app/src/main/kotlin/{{config.get_base_package_path()}}/di/"
+        },
+
+        {
+            "file": "app/src/main/kotlin/base_package_name/ui/splash/AppSplashScreen.kt.jinja",
+            "path": "./android/app/src/main/kotlin/{{config.get_base_package_path()}}/ui/splash/"
+        },
+        {
+            "file": "app/src/main/kotlin/base_package_name/ui/splash/AppSplashScreenViewModel.kt.jinja",
+            "path": "./android/app/src/main/kotlin/{{config.get_base_package_path()}}/ui/splash/"
         }
     ]
 }

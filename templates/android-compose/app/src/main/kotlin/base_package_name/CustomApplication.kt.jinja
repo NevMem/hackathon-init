@@ -1,8 +1,8 @@
 package {{config.base_package_name}}
 
 import android.app.Application
-import com.nevmem.survey.di.createAppModule
-import com.nevmem.survey.di.createViewModelsModule
+import {{config.base_package_name}}.di.createAppModule
+import {{config.base_package_name}}.di.createViewModelsModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -13,9 +13,9 @@ class CustomApplication : Application() {
         initMetrica()
 
         startKoin {
-            androidContext(this@SurveyApplication)
+            androidContext(this@CustomApplication)
             modules(
-                createAppModule(this@SurveyApplication),
+                createAppModule(this@CustomApplication),
                 createViewModelsModule(),
             )
         }

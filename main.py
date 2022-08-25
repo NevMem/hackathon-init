@@ -79,6 +79,9 @@ class Pipeline:
         for template in execution_order:
             template.run(self.args.out_dir, config=self.config, **global_defines)
 
+        for template in execution_order:
+            template.run_tests(self.args.out_dir)
+
     @staticmethod
     def _create_execution_order(templates: List[Template]) -> List[Template]:
         ordered_template_ids = set()

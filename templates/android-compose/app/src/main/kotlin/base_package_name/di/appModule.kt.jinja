@@ -1,0 +1,22 @@
+package {{config.base_package_name}}.di
+
+import android.content.Context
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.plus
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
+
+private const val BACKGROUND_SCOPE = "background"
+internal val BACKGROUND_SCOPE_QUALIFIER = named(BACKGROUND_SCOPE)
+
+private const val UI_SCOPE = "ui"
+internal val UI_SCOPE_QUALIFIER = named(UI_SCOPE)
+
+fun createAppModule(context: Context) = module {
+    single(BACKGROUND_SCOPE_QUALIFIER) { CoroutineScope(Dispatchers.Default) + SupervisorJob() }
+    single(UI_SCOPE_QUALIFIER) { CoroutineScope(Dispatchers.Main) + SupervisorJob() }
+
+    single { context.getSharedPreferences("storage", Context.MODE_PRIVATE) }
+}

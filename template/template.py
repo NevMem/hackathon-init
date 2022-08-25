@@ -1,8 +1,10 @@
+from abc import ABC, abstractclassmethod
 from config.config_file import ConfigFile
 from typing import List, Dict
 import jinja2
 import json
 import os
+import subprocess as sp
 from termcolor import cprint
 
 
@@ -46,24 +48,57 @@ class TemplateFile:
         return str(self.__dict__)
 
 
+class TemplateTest(ABC):
+    @abstractclassmethod
+    def run(self, out_dir: str):
+        pass
+
+
+class TemplateGradleTest(TemplateTest):
+    command: str
+    name: str
+    def __init__(self, command: str, name: str):
+        self.command = command
+        self.name = name
+
+    def run(self, out_dir: str):
+        cprint(f"Running test: {self.name}", color='green')
+        try:
+            sp.check_output(['/bin/bash', './gradlew', self.command], cwd=out_dir)
+        except sp.CalledProcessError as error:
+            print(error.returncode)
+
+    def __repr__(self):
+        return str(self.__dict__)
+
+
 class Template:
     files: List[TemplateFile]
     depends_on: List[str]
     defines: Dict[str, str]
     template_id: str
     marker: str
+    tests: List[TemplateTest]
 
-    def __init__(self, template_id: str, marker: str, files: List[TemplateFile], depends_on: List[str], defines: Dict[str, str]):
+    def __init__(self, template_id: str, marker: str, files: List[TemplateFile], depends_on: List[str], defines: Dict[str, str], tests: List[TemplateTest]):
         self.template_id = template_id
         self.files = files
         self.marker = marker
         self.depends_on = depends_on
         self.defines = defines
+        self.tests = tests
 
     def run(self, out_dir: str, *args, **kwargs):
         cprint(f"Running template: {self.template_id.upper()}", on_color='on_green')
         for file in self.files:
             file.run(out_dir, *args, **kwargs)
+
+    def run_tests(self, out_dir: str):
+        if len(self.tests) == 0:
+            return
+        cprint(f"Running tests for template {self.template_id.upper()}:", on_color='on_green')
+        for test in self.tests:
+            test.run(out_dir)
 
     def __repr__(self):
         return str(self.__dict__)
@@ -84,12 +119,26 @@ class TemplateLoader:
             if 'defines' in data:
                 defines = data['defines']
 
+            tests = []
+            if 'tests' in data:
+                for test in data['tests']:
+                    if 'type' not in test:
+                        cprint(f"Malformed test found: {test}", on_color='on_red')
+                        continue
+                    if test['type'] == 'gradle':
+                        tests.append(TemplateGradleTest(test['command'], test['name']))
+
+            depends = []
+            if 'depends_on' in data:
+                depends = data['depends_on']
+
             return Template(
                 template_id=data['id'],
                 marker=data['marker'],
                 files=files,
-                depends_on=data['depends_on'],
+                depends_on=depends,
                 defines=defines,
+                tests=tests,
             )
 
 

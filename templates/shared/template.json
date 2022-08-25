@@ -1,0 +1,10 @@
+{
+    "id": "shared-versions",
+    "marker": "shared-versions",
+    "files": [
+        {
+            "file": "versions.gradle.jinja",
+            "path": "shared/"
+        }
+    ]
+}

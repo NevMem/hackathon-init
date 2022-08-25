@@ -4,6 +4,10 @@
     "depends_on": [],
     "files": [
         {
+            "file": "gradlew",
+            "path": "./"
+        },
+        {
             "file": "settings.gradle.kts.jinja",
             "path": "./"
         },
