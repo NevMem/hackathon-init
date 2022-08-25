@@ -29,11 +29,11 @@ fun AppSplashScreen(navController: NavController) {
             .wrapContentHeight()
     )
     LaunchedEffect(viewModel.destination.value) {
-        navController.navigate("home")
-        /* if (viewModel.destination.value == EthnoSplashScreenViewModel.Destination.Join) {
-            navController.navigate("join")
-        } else if (viewModel.destination.value == EthnoSplashScreenViewModel.Destination.Survey) {
-            navController.navigate("survey")
+        navController.navigate("main")
+        /* if (viewModel.destination.value == EthnoSplashScreenViewModel.Destination.Login) {
+            navController.navigate("login")
+        } else if (viewModel.destination.value == EthnoSplashScreenViewModel.Destination.Main) {
+            navController.navigate("main")
         } */
     }
 }
